@@ -2,7 +2,7 @@ You can generate outcomes in section 5 in paper using codes in this folder on Ma
 Regular laptops can not run these codes properly, but you can modify relevant parameters in Datagen.m (as captioned in Datagen.m) if you want to have a fast and rough run to check things first. 
 The main program to run is Synthetic_run.m.
 
-These codes as they are now corresponding to the anisotropic example with angle weighting presented in section 5(b). You can change the angle weighting approach to the one described in appendix A, or switch off the angle weighting and apply an unweighted approach, by captioning line 31 and uncaptioning line 28 or line 34 in Synthetic_run.m.
+These codes as they are now correspond to the anisotropic example with angle weighting presented in section 5(b). You can change the angle weighting approach to the one described in appendix A, or switch off the angle weighting and apply an unweighted approach, by captioning line 31 and uncaptioning line 28 or line 34 in Synthetic_run.m.
 
 If you want to look at the isotropic example presented in section 5(a), all you need to do is to modify the test functions defined in Datagen.m by sustituting line 44 with  
 
