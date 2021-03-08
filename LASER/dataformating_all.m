@@ -1,9 +1,18 @@
 %20190911
-%Format the recordings from all launches
+%Format the recordings from all launches in LASER drifters.
+%To run this code, you need to have laserspotdrifterscleanv15_all.mat ready, the directions to which is written in line 11. You can also write your own version if you find it confusing.
+%However you do it, in the end, there should be four matrices trajmat_X, trajmat_Y, trajmat_U, trajmat_V that all have dimensions ntime*ndrifters, where ntime is the number of snapshots available in LASER, and 
+%ndrifters is the number of drifters available in LASER. Abscent recordings are denoted by NaN. The matrix trajmat_X denotes the recorded longitude, trajmat_Y denots the recorded latitude, 
+%trajmat_U denotes the recorded zonal velocities, and trajmat_V denotes the recorded meriodinal velocities. Importantly, the time column is sorted in ascending order. All units are the same as in https://data.gulfresearchinitiative.org/data/R4.x265.237:0001
+%The four matrices are then saved as LASER_all.mat, which will be used in the decomposition codes.
+
 clear all
 close all
 
-load laserspotdrifterscleanv15_all.mat
+load laserspotdrifterscleanv15_all.mat %This .mat file is converted directly from laserspotdrifterscleanv15.dat downloaded from https://data.gulfresearchinitiative.org/data/R4.x265.237:0001
+%To convert laserspotdrifterscleanv15.dat into laserspotdrifterscleanv15_all.mat, simply run Matlab, select "Import Data", and load laserspotdrifterscleanv15.dat. When you see the table in 
+%Matlab, select the "Range" as A6:BB3564200 (which should be the default Matlab selection), "Output Type" as "Column vectors" (which is likely not the Matlab default option), and import. Rename
+%the imported matrix as "laserspotdrifterscleanv15", and save as laserspotdrifterscleanv15_all.mat.
 
 laserspotdrifterscleanv15(:,1)=erase(laserspotdrifterscleanv15(:,1),"L_");
 
