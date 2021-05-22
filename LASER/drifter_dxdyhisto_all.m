@@ -38,9 +38,7 @@ for i=1:ndrfts-1
 end
 
 disp('X1,X2,etc. are formed.')
-dX=(X1-X2).*(cosd(Y1)+cosd(Y2))/2*Rearth*pi/180;
-%dX=(X1-X2)*cosave*Rearth*pi/180;
-% dX=(X1.*cosd(Y1)-X2.*cosd(Y2))*Rearth*pi/180;
+dX=(X1.*cosd(Y1)-X2.*cosd(Y2))*Rearth*pi/180;
 dY=(Y1-Y2)*Rearth*pi/180;
 
 clearvars X1 X2 Y1 Y2
@@ -57,23 +55,18 @@ N_pcolor = N';
 N_pcolor(size(N_pcolor,1)+1,size(N_pcolor,2)+1) = 0;
 xl = linspace(min(dX),max(dX),size(N_pcolor,2)); % Columns of N_pcolor
 yl = linspace(min(dY),max(dY),size(N_pcolor,1)); % Rows of N_pcolor
-N_plot=log10(N_pcolor);
+N_plot=log(N_pcolor);
 N_plot(N_pcolor==0)=NaN;
-h= pcolor(xl,yl,N_plot);
+h = pcolor(xl,yl,N_plot);
 set(h, 'linestyle', 'none')
 colormap((jet)) % Change color scheme 
-hC=colorbar; % Display colorbar
+colorbar % Display colorbar
 h.ZData = -max(N_pcolor(:))*ones(size(N_pcolor));
 ax = gca;
 ax.ZTick(ax.ZTick < 0) = [];
 pbaspect([max(dX)-min(dX) max(dY)-min(dY) 1])
-
-Lmax=floor(nanmax(nanmax(N_plot)));
-L=10.^(0:1:Lmax);
-l=log10(L);
-set(hC,'Ytick',l,'YTicklabel',L);
-
 xlabel('\Delta x [m]')
 ylabel('\Delta y [m]')
+title('Log[drifter numbers]')
 savefig('dxdy_histo.fig')
 

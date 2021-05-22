@@ -1,3 +1,5 @@
+%20200120: enforce that the smallest bin center is larger than 15 m.
+
 %20190914:modified from dist_axis_comp.m in GLAD/20190619
 %(Change it so that less storage is demanded, but it takes long to run)
 
@@ -32,23 +34,22 @@ npairs = ndrfts*(ndrfts-1)/2;
 
 tic
 %Only keep the drifters whose positions fall into a circle
-% circlespec
+circlespec
 
 Rearth=6.3782*10^6;
 
-% converted_X=trajmat_X.*cosave*Rearth*pi/180;
-% converted_X=trajmat_X.*cosd(trajmat_Y)*Rearth*pi/180;
-% converted_Y=trajmat_Y*Rearth*pi/180;
-% 
-% Radius_test=sqrt((converted_X-center_x).^2+(converted_Y-center_y).^2);
-% 
-% trajmat_X(Radius_test>radius)=NaN;
-% trajmat_Y(Radius_test>radius)=NaN;
-% trajmat_U(Radius_test>radius)=NaN;
-% trajmat_V(Radius_test>radius)=NaN;
+converted_X=trajmat_X.*cosd(trajmat_Y)*Rearth*pi/180;
+converted_Y=trajmat_Y*Rearth*pi/180;
+
+Radius_test=sqrt((converted_X-center_x).^2+(converted_Y-center_y).^2);
+
+trajmat_X(Radius_test>radius)=NaN;
+trajmat_Y(Radius_test>radius)=NaN;
+trajmat_U(Radius_test>radius)=NaN;
+trajmat_V(Radius_test>radius)=NaN;
 
 n=1;
-%This part is different from GLAD codes; I have to dump NaN values at this
+% I have to dump NaN values at this
 %step to save memory.Specifically, in X1,Y1,U1,V1 etc.,
 %pair number and time are treated equally. They are all 1D arrays now. This
 %makes it easier to dump NaN values.
@@ -72,17 +73,16 @@ end
 toc
 disp('X1,X2,etc. are formed.')
 
-dr=sqrt(((X1-X2).*(cosd(Y1)+cosd(Y2))/2).^2+...
+
+dr=sqrt((X1.*cosd(Y1)-X2.*cosd(Y2)).^2+...
     (Y1-Y2).^2)*Rearth*pi/180;
-% dr=sqrt((X1.*cosd(Y1)-X2.*cosd(Y2)).^2+...
-%     (Y1-Y2).^2)*Rearth*pi/180;
 
 disp('Hopefully all the big-momory variables are done now.')
 
 clearvars X1 X2 Y1 Y2
 
  %Dump the ones at too large a scale
-xcutoff=3*10^5;
+xcutoff=2*10^5;
 
 dr=dr(dr<=xcutoff);
 
@@ -94,8 +94,6 @@ dr=sort(dr);
 
 nallvalid=sum(~isnan(dr));
 nBin=min(1000,round((nallvalid/(5000))));
-%nBin=round(1000*(nallvalid/429920600));%changed according to how small the circle is
-%all LASER data contains 429920600 pairs.
 
 nallpairs=length(dr);
 
@@ -107,16 +105,19 @@ fBin_r_index=1:neachBin_r:nallpairs;
 fBin_r_index=round(fBin_r_index);
 
 dist_bin=dr(fBin_r_index);
+
 %Prevent bins centered at less than 15 m.
 idelete=find(dist_bin<30,1,'last');
 if idelete>1
     dist_bin(2:idelete)=[];
 end
+
 %Bin faces and centers used for actual structure function calculations
 dist_axis = 0.5*(dist_bin(1:end-1) + dist_bin(2:end));
 
+
 if length(dist_axis)~=length(unique(dist_axis))||dist_axis(1)==0
-    error('it turns out there are zero bins')
+    error('it turns out there are empty bins')
 end
 
 

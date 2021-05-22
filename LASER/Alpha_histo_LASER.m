@@ -28,27 +28,27 @@ npairs = ndrfts*(ndrfts-1)/2;
 % npairs_sampled = ndrfts_sampled*(ndrfts_sampled-1)/2;
 
 n=1;
-%This part is different from LASER codes; I have to dump NaN values at this
-%step to save memory.Specifically, in X1,Y1,U1,V1 etc.,
+%I have to dump NaN values at this
+%step to save memory. Specifically, in X1,Y1,U1,V1 etc.,
 %pair number and time are treated equally. They are all 1D arrays now. This
 %makes it easier to dump NaN values.
 
 
 
 % %Only keep the drifters whose positions fall into a circle
-% circlespec
+circlespec
 
 Rearth=6.3782*10^6;
 
-% converted_X=trajmat_X.*cosd(trajmat_Y)*Rearth*pi/180;
-% converted_Y=trajmat_Y*Rearth*pi/180;
-% 
-% Radius_test=sqrt((converted_X-center_x).^2+(converted_Y-center_y).^2);
-% 
-% trajmat_X(Radius_test>radius)=NaN;
-% trajmat_Y(Radius_test>radius)=NaN;
-% trajmat_U(Radius_test>radius)=NaN;
-% trajmat_V(Radius_test>radius)=NaN;
+converted_X=trajmat_X.*cosd(trajmat_Y)*Rearth*pi/180;
+converted_Y=trajmat_Y*Rearth*pi/180;
+
+Radius_test=sqrt((converted_X-center_x).^2+(converted_Y-center_y).^2);
+
+trajmat_X(Radius_test>radius)=NaN;
+trajmat_Y(Radius_test>radius)=NaN;
+trajmat_U(Radius_test>radius)=NaN;
+trajmat_V(Radius_test>radius)=NaN;
 % 
 for i=1:ndrfts-1
     for j = i+1:ndrfts
@@ -69,14 +69,11 @@ end
 
 disp('X1,X2,etc. are formed.')
 
-dr=sqrt(((X1-X2).*(cosd(Y1)+cosd(Y2))/2).^2+...
-    (Y1-Y2).^2)*Rearth*pi/180;
-	
-% dr=sqrt((X1.*cosd(Y1)-X2.*cosd(Y2)).^2+...
-%     (Y1-Y2).^2)*Rearth*pi/180;
 
-Cosine=(X1-X2).*(cosd(Y1)+cosd(Y2))/2;
-% Cosine=X1.*cosd(Y1)-X2.*cosd(Y2);
+dr=sqrt((X1.*cosd(Y1)-X2.*cosd(Y2)).^2+...
+    (Y1-Y2).^2)*Rearth*pi/180;
+
+Cosine=X1.*cosd(Y1)-X2.*cosd(Y2);
 Sine = Y1 - Y2;
 clearvars X1 X2 Y1 Y2
 Fnormalization= sqrt(Cosine.^2+Sine.^2);
@@ -104,7 +101,7 @@ nangleaxis=32;
     
 nanglecount=zeros(length(dist_axis),nangleaxis);
 
-%There may be BUG HERE! dr is 1D array. Probably shouldn't search in 2D.
+%dr is 1D array. Probably shouldn't search in 2D.
 %Doesn't cause apparent harm so far.-20191113
 for ix=1:length(dist_axis)
     [ivalid_t,ivalid_pair] = find(dr<dist_bin(ix+1) & ...

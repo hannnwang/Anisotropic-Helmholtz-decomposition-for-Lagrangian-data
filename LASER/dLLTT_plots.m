@@ -30,7 +30,7 @@ dlt_m2_mag=dlt2M_ensemble;
 iplot_submeso=find(dist_axis<rend_sub & dist_axis>rstart);
 iplot_meso=find(dist_axis<=rend);
 
-%Mark the limiting behavior 
+%Mark the limiting values (Eq.36-37 in paper) 
 load LASER_CuCvCuv.mat
 figure(2);subplot(3,2,4) 
 SLL0=0.*dist_axis(iplot_meso)+Cu0+Cv0;

@@ -1,5 +1,5 @@
 %20190911
-%Format the recordings from all launches in LASER drifters.
+%Format the recordings from all launches in LASER drifters. (20210522: Note: there is a BUG here: undrogued drifters are included too! Impacts are too be investigated. Thanks Dhruv for noticing this.)
 %To run this code, you need to have laserspotdrifterscleanv15_all.mat ready, the directions to which is written in line 11. You can also write your own version if you find it confusing.
 %However you do it, in the end, there should be four matrices trajmat_X, trajmat_Y, trajmat_U, trajmat_V that all have dimensions ntime*ndrifters, where ntime is the number of snapshots available in LASER, and 
 %ndrifters is the number of drifters available in LASER. Abscent recordings are denoted by NaN. The matrix trajmat_X denotes the recorded longitude, trajmat_Y denots the recorded latitude, 

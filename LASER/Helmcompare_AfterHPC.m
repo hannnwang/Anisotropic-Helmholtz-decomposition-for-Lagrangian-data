@@ -1,7 +1,9 @@
 clear all
 close all
 doPlotSetup
-  Moment=0;
+%This is written rather uglily: you can see that the routines between line 7 and line 75 is largely repeated from line 82 to line 163
+
+Moment=0;
 mattitle=sprintf('LASER_all_ensemble_Moment_%d.mat',Moment);
 load(mattitle);
 
@@ -11,11 +13,9 @@ fg2=figure(2);
     
 dist_axis=dist_axis';
 
-xcutoff=3*10^5;
+xcutoff=radius;
 iplot=find(dist_axis<xcutoff);
-
-
-%moment
+%Conduct the mode-by-mode Helmholtz decomposition
 intgrd2M_cos_ensemble=(-Moment.*dlt2M_sin_ensemble-dll2M_cos_ensemble+...
     dtt2M_cos_ensemble)./dist_axis;
 intgrd2M_sin_ensemble=(+Moment.*dlt2M_cos_ensemble-dll2M_sin_ensemble+...
@@ -36,15 +36,15 @@ Ddd2M_sin_ensemble=dll2M_sin_ensemble-...
 if Moment>0
 Drr2M_mag=sqrt(Drr2M_sin_ensemble.^2+Drr2M_cos_ensemble.^2);
 Ddd2M_mag=sqrt(Ddd2M_sin_ensemble.^2+Ddd2M_cos_ensemble.^2);
-else 
+else %case when Moment=0
 Drr2M_mag=Drr2M_sin_ensemble;
 Ddd2M_mag=Ddd2M_sin_ensemble;
 end
-
+%Rotational and divergent structure functions:
 Drr_m0_ensemble=Drr2M_mag;
 Ddd_m0_ensemble=Ddd2M_mag;
 
-
+%Plotting
 figure(1)
 subplot(1,3,1)
 plot(dist_axis(iplot),Drr_m0_ensemble(iplot),'Color','[0.4940, 0.1840, 0.5560]');
@@ -83,7 +83,6 @@ load(mattitle);
 
 dist_axis=dist_axis';
 
-%moment
 intgrd2M_cos_ensemble=(-Moment.*dlt2M_sin_ensemble-dll2M_cos_ensemble+...
     dtt2M_cos_ensemble)./dist_axis;
 intgrd2M_sin_ensemble=(+Moment.*dlt2M_cos_ensemble-dll2M_sin_ensemble+...
@@ -100,7 +99,7 @@ Drr2M_sin_ensemble=dtt2M_sin_ensemble+...
 
 Ddd2M_sin_ensemble=dll2M_sin_ensemble-...
     intRHS_trapz_nobin(dist_axis,intgrd2M_sin_ensemble);
-
+%Rotational and divergent structure functions:
 if Moment>0
 Drr2M_mag=sqrt(Drr2M_sin_ensemble.^2+Drr2M_cos_ensemble.^2);
 Ddd2M_mag=sqrt(Ddd2M_sin_ensemble.^2+Ddd2M_cos_ensemble.^2);
@@ -108,6 +107,7 @@ else
 Drr2M_mag=Drr2M_sin_ensemble;
 Ddd2M_mag=Ddd2M_sin_ensemble;
 end
+%plotting:
 figure(1)
 subplot(1,3,imoment+1)
 plot(dist_axis(iplot),Drr2M_mag(iplot),'Color','[0.4940, 0.1840, 0.5560]')
@@ -161,21 +161,6 @@ title(figtitle)
 xlabel('r(m)')
 lgd.FontSize = 16;
 
-% figure(3)
-% subplot(1,2,imoment)
-% plot(dist_axis(iplot),Drr2M_mag(iplot)./Drr_m0_ensemble(iplot),'Color','[0.4940, 0.1840, 0.5560]')
-% hold on
-% plot(dist_axis(iplot),Ddd2M_mag(iplot)./Ddd_m0_ensemble(iplot),'Color','[0.4660, 0.6740, 0.1880]')
-% 
-% legend('$<u_r^2> ratio$','$<u_d^2> ratio$',...
-%     'Interpreter','latex','Location','northwest','Autoupdate','Off')
-%   
-% axis square  
-% 
-% xlabel('r(m)')
-% figtitle=sprintf('%d th mode',Moment);
-% title(figtitle)
-% lgd.FontSize = 16;
 
 end
 f1=figure(1);
