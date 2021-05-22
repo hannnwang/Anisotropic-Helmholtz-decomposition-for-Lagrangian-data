@@ -21,10 +21,10 @@ Momentvec=0:2:4; %Compute up to n=4 in the azumuthal Fourier expansion. I refer 
 Momentvec(end+1)=100;
 
 for Moment=Momentvec(1:end)
-Arbitrarymode_trapezoidal_LASER %Angle weighting described in section 3 of the paper
+Arbitrarymode_trapezoidal_LASER %Angle weighting described in section 3  of the paper
 
 %Arbitrarymode_axisweighted_LASER %This corresponds to the
-    %alternative angle weighting approach described in Appendix A in paper. You may need to call Alpha_histo_LASER.m first if you are using this code.
+    %alternative angle weighting approach described in Appendix A in paper. You may need to call Alpha_histo_LASER.m first if you are using this method.
 end
 dLLTT_plots %Plotting the velocity structure functions
 Helmcompare_AfterHPC %Conducting the Helmholtz decomposition and plotting the divergent/rotational structure functions
